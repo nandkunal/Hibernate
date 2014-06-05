@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="HibernateWebExample" basedir="." >
+    <property name="src.dir" value="src" />
+    <property name="web.dir" value="WebContent" />
+    <property name="build.dir" value="${basedir}/build" />
+    <property name="name" value="HibernateWebExample" />
+
+    <path id="project-classpath">
+
+    	<!--  here give path for jar repository -->
+    	
+    	<fileset dir="${web.dir}/WEB-INF/lib">
+    		<include name="*.jar" />
+    	</fileset>
+    	<pathelement path="${build.dir}" />
+    </path>
+
+    <target name="build" depends="compile" description="build project, but first compile it">
+         <war destfile="build/${name}.war"
+             webxml="${web.dir}/WEB-INF/web.xml">
+             <lib dir="${web.dir}/WEB-INF/lib"/>
+             <classes dir="${build.dir}/classes" />
+            <fileset dir="${web.dir}">
+                <include name="**/*.*"/>
+            </fileset>
+        </war>
+    </target>
+
+    <target name="compile" description="Compile java files and place them webContents/web-inf/">
+    	<mkdir dir="${build.dir}/classes"/>
+        <javac destdir="${build.dir}/classes" failonerror="true">
+            <src path="${src.dir}"/>
+            <classpath refid="project-classpath"/>
+        </javac>
+    	<!-- include all configuration files -->
+    	         	 <copy todir="${build.dir}/classes">
+    	         	        <fileset dir="${src.dir}" includes="**/*.xml,**/*.properties"/>
+    	         	    </copy>
+    </target>
+
+    <target name="clean">
+    	 <delete dir="${build.dir}" failonerror="true"/>
+    </target>
+</project>
